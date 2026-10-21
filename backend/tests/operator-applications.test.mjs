@@ -281,6 +281,23 @@ test("driver submits real files, Admin requests changes and approves, and the ex
   )
 })
 
+test("original certification vehicle details persist for Admin review without self-verifying a truck", async (t) => {
+  const { db, client } = await setup(t)
+  const driver = await client("certification-driver", "rider")
+  const documents = await uploadDocuments(driver)
+  const details = { brand: "Isuzu", model: "Elf 2024", orcr: "OR-123", passengerCapacity: 2, color: "White", vehicleType: "4-Wheel Truck" }
+  const invalid = await driver("operator-applications/me", { ...submission, truck: { ...submission.truck, ...details, passengerCapacity: -1 }, documents })
+  assert.equal(invalid.response.status, 400)
+  const result = await driver("operator-applications/me", { ...submission, truck: { ...submission.truck, ...details }, documents })
+  assert.equal(result.response.status, 201, JSON.stringify(result.data))
+  for (const [key, value] of Object.entries(details)) {
+    assert.equal(result.data.application.truck[key], value)
+    assert.equal(db.collection("trucks").records[0][key], value)
+  }
+  assert.equal(result.data.application.status, "pending")
+  assert.equal(db.collection("trucks").records[0].verified, false)
+})
+
 test("applicants cannot self-approve, view other applications or files, or bypass CSRF", async (t) => {
   const { client } = await setup(t)
   const driver = await client("driver", "rider"),

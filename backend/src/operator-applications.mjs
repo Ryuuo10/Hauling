@@ -185,6 +185,20 @@ export function createOperatorApplicationsApi({
           payloadKg: Number(value.truck?.payloadKg),
           serviceAreas: required(value.truck?.serviceAreas, "Service areas"),
         }
+        // Preserve the original certification form's vehicle specifications.
+        // Optional fields keep existing application clients compatible.
+        const vehicleDetails = {}
+        for (const field of ["brand", "model", "orcr", "color", "vehicleType"]) {
+          if (value.truck?.[field] !== undefined)
+            vehicleDetails[field] = text(value.truck[field], 200)
+        }
+        if (value.truck?.passengerCapacity !== undefined) {
+          const passengers = value.truck.passengerCapacity
+          if (!Number.isInteger(passengers) || passengers < 0 || passengers > 100)
+            fail(400, "Enter a valid passenger capacity.")
+          vehicleDetails.passengerCapacity = passengers
+        }
+        Object.assign(truck, vehicleDetails)
         if (
           !Number.isFinite(truck.payloadKg) ||
           truck.payloadKg <= 0 ||
@@ -249,6 +263,7 @@ export function createOperatorApplicationsApi({
               .map((value) => value.trim())
               .filter(Boolean),
             equipment: [],
+            ...vehicleDetails,
             verified: false,
             available: true,
             createdAt: new Date().toISOString(),
@@ -273,6 +288,7 @@ export function createOperatorApplicationsApi({
                 truck: truck.make,
                 bodyType: truck.bodyType,
                 payloadKg: truck.payloadKg,
+                ...vehicleDetails,
                 areas: truck.serviceAreas
                   .split(",")
                   .map((value) => value.trim())

@@ -24,6 +24,12 @@ export type OperatorApplication = {
     bodyType: string
     payloadKg: number
     serviceAreas: string
+    brand?: string
+    model?: string
+    orcr?: string
+    passengerCapacity?: number
+    color?: string
+    vehicleType?: string
   }
   documents: ApplicationDocument[]
   status: "pending" | "approved" | "rejected" | "changes_requested"

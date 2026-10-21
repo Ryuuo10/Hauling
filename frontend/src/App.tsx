@@ -11,6 +11,7 @@ import AdminPortal from "@/features/admin/AdminPortal";
 import FleetPortal from "@/features/fleet/FleetPortal";
 import RiderSignUp from "@/features/operator/RiderSignUp";
 import OperatorApplicationScreen from "@/features/operator/OperatorApplication";
+import DriverCertification from "@/features/operator/DriverCertification";
 import SplashScreen from "@/components/SplashScreen";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
 import { auth } from "@/api/auth";
@@ -1484,7 +1485,7 @@ export default function App() {
     void auth.session().then(({ user }) => {
       if (!active || !user) return;
       setAuthUser(user); setLoginType(user.role);
-      setScreen(user.role === "fleet" && user.verificationStatus !== "approved" ? "operator-application" : user.role === "admin" ? "admin-portal" : user.role === "fleet" ? "fleet-portal" : user.role === "rider" ? "rider-portal" : "dashboard");
+      setScreen((user.role === "fleet" || user.role === "rider") && user.verificationStatus !== "approved" ? "operator-application" : user.role === "admin" ? "admin-portal" : user.role === "fleet" ? "fleet-portal" : user.role === "rider" ? "rider-portal" : "dashboard");
     }).catch(() => { /* Login remains available if the account service is offline. */ });
     return () => { active = false; };
   }, []);
@@ -1510,7 +1511,7 @@ export default function App() {
 
   const handleLoginSubmit = (user: AuthUser) => {
     setAuthUser(user); setLoginType(user.role);
-    if (user.role === "fleet" && user.verificationStatus !== "approved") {
+    if ((user.role === "fleet" || user.role === "rider") && user.verificationStatus !== "approved") {
       setScreen("operator-application");
       return;
     }
@@ -1562,7 +1563,9 @@ export default function App() {
               <AuthenticatedExperience user={authUser} screen={screen} category={bookingCategory} setCategory={setBookingCategory} setScreen={setScreen} onLogout={requestLogout} />
             </BookingProvider>
           ) : <>
-          {screen === "operator-application" && authUser && <OperatorApplicationScreen user={authUser} onLogout={() => { void doLogout("login"); }} onApproved={(user) => { setAuthUser(user); setLoginType(user.role); setScreen(user.role === "fleet" ? "fleet-portal" : "rider-portal"); }} />}
+          {screen === "operator-application" && authUser && (authUser.role === "rider"
+            ? <DriverCertification user={authUser} onLogout={() => { void doLogout("login"); }} onApproved={(user) => { setAuthUser(user); setLoginType(user.role); setScreen("rider-portal"); }} />
+            : <OperatorApplicationScreen user={authUser} onLogout={() => { void doLogout("login"); }} onApproved={(user) => { setAuthUser(user); setLoginType(user.role); setScreen(user.role === "fleet" ? "fleet-portal" : "rider-portal"); }} />)}
           {screen === "dashboard" && (
             <CustomerDashboard
               onLogout={requestLogout}
