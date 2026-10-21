@@ -1,0 +1,10 @@
+{
+  "description": "KadaGo is an all-in-one transportation and delivery platform in Bukidnon, Philippines, offering seamless rides, errands, and hauling services for users.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

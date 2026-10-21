@@ -1,0 +1,477 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+@import 'tailwindcss';
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  background: #F0F4FF;
+}
+
+.google-sign-in-button {
+  width: 100%;
+  min-height: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.splash-screen {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  padding: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right))
+    max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
+  background: #FFFFFF;
+  animation: splash-exit 250ms ease-in 1550ms both;
+}
+
+.splash-brand {
+  width: min(100%, 320px, 70vh);
+  width: min(100%, 320px, 70dvh);
+  text-align: center;
+}
+
+.splash-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.splash-truck {
+  animation: splash-truck-enter 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.splash-cargo {
+  transform-origin: 328.5px 138.5px;
+  animation: splash-cargo-pop 380ms cubic-bezier(0.34, 1.35, 0.64, 1) 320ms both;
+}
+
+.splash-wordmark {
+  transform-origin: 338px 248px;
+  animation: splash-wordmark-enter 340ms ease-out 600ms both;
+}
+
+.splash-tagline {
+  margin-top: 20px;
+  color: #1D55D6;
+  font-size: clamp(12px, 3.5vw, 15px);
+  font-weight: 500;
+  animation: splash-tagline-enter 280ms ease-out 900ms both;
+}
+
+.app-shell--welcome-enter {
+  animation: welcome-enter 180ms ease-out both;
+}
+
+@keyframes splash-truck-enter {
+  from { opacity: 0; transform: translateX(-36px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes splash-cargo-pop {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes splash-wordmark-enter {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes splash-tagline-enter {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes splash-exit {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes welcome-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-screen,
+  .splash-screen *,
+  .app-shell--welcome-enter {
+    animation: none;
+  }
+}
+
+/* Fill the actual device viewport, including changing mobile browser chrome. */
+.app-shell {
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+}
+
+.app-frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.app-content {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.app-frame :where(.flex-1, .grid > *, input, select, textarea, button) {
+  min-width: 0;
+}
+
+.app-frame :where(.flex-col > .flex-1, .h-full) {
+  min-height: 0;
+}
+
+.app-frame :where(p, h1, h2, h3, label, button) {
+  overflow-wrap: anywhere;
+}
+
+.app-frame :where(img) {
+  max-width: 100%;
+  height: auto;
+}
+
+.app-frame :where(button) {
+  cursor: pointer;
+  touch-action: manipulation;
+  min-height: 44px;
+}
+
+.app-frame :where(button:disabled) {
+  cursor: default;
+}
+
+.app-frame :where(button, input, select, textarea):focus-visible {
+  outline: 2px solid #1D55D6;
+  outline-offset: 3px;
+}
+
+.app-frame :where(input, select, textarea) {
+  max-width: 100%;
+}
+
+.app-frame :where(.overflow-y-auto) {
+  overscroll-behavior-y: contain;
+  scrollbar-color: #CBD5E1 transparent;
+  scrollbar-width: thin;
+}
+
+.navigation-brand {
+  display: none;
+}
+
+.navigation-items > button {
+  flex: 1;
+}
+
+.app-navigation {
+  z-index: 10;
+}
+
+.modal-panel {
+  display: block;
+  max-width: 560px;
+  max-height: calc(100% - 32px);
+  overflow-y: auto;
+}
+
+.modal-panel > .overflow-y-auto {
+  max-height: 45dvh;
+}
+
+.app-content--auth > .h-full,
+.app-content--form > .h-full {
+  overflow-y: auto;
+}
+
+.app-content :where(.items-center.justify-center.h-full) {
+  justify-content: safe center;
+}
+
+/* Let children scroll rather than shrink on short or landscape screens. */
+.app-content--auth > .flex-col > :not(.flex-1),
+.app-content--form > .overflow-y-auto > * {
+  flex-shrink: 0;
+}
+
+@media (max-width: 767px) {
+  .app-frame :where(input, select, textarea) {
+    font-size: 16px !important;
+  }
+
+  .app-navigation .navigation-items > button {
+    padding-inline: 3px;
+  }
+
+  .app-navigation .navigation-items > button > span:last-of-type {
+    font-size: 10px;
+  }
+
+  .operator-navigation .navigation-items > button > span:last-of-type {
+    font-size: clamp(8px, 2.5vw, 10px);
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 399px) {
+  .app-content--form :where(.grid-cols-2, .grid-cols-3) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 640px) {
+  .app-content--auth,
+  .app-content--form {
+    display: flex;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .app-content--auth > *,
+  .app-content--form > * {
+    width: 100%;
+    max-width: 560px;
+    border-radius: 24px;
+    box-shadow: 0 12px 40px rgba(13, 24, 40, 0.08);
+  }
+
+  .app-content--form > * {
+    max-width: 900px;
+  }
+
+  .app-content--auth > *,
+  .app-content--form > .overflow-y-auto {
+    padding: 28px;
+  }
+
+  .booking-categories {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .booking-categories > * {
+    margin: 0;
+  }
+
+  .registration-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 16px;
+  }
+
+  .registration-fields > * {
+    margin: 0;
+  }
+
+  .registration-fields > .grid {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 768px) {
+  .portal-layout {
+    padding-left: 210px;
+  }
+
+  .portal-layout > .app-navigation {
+    position: absolute;
+    inset: 0 auto 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 210px;
+    padding: 28px 16px;
+    overflow-y: auto;
+    border-top: 0 !important;
+    border-right: 1px solid #E2E8F0;
+  }
+
+  .navigation-brand {
+    display: block;
+    padding: 0 8px 28px;
+  }
+
+  .navigation-brand img {
+    width: 136px;
+  }
+
+  .navigation-brand p {
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748B;
+  }
+
+  .app-navigation .navigation-items {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .app-navigation .navigation-items > button {
+    flex: none;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 14px 12px;
+    text-align: left;
+  }
+
+  .app-navigation .navigation-items > button > span:last-of-type {
+    font-size: 13px;
+  }
+
+  .app-navigation button[aria-current="page"] {
+    background: #F1F5FF;
+  }
+
+  .dashboard-grid {
+    width: 100%;
+    max-width: 1440px;
+    margin-inline: auto;
+    padding: 24px;
+  }
+
+  .portal-layout > .absolute.rounded-b-3xl {
+    left: auto;
+    width: min(440px, calc(100% - 24px));
+    max-height: calc(100% - 24px);
+    overflow-y: auto;
+  }
+
+  .modal-overlay {
+    align-items: center;
+  }
+
+  .modal-panel {
+    margin-block: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .app-content--auth > .landing-screen {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 48px;
+    max-width: 1120px;
+    padding: 48px;
+  }
+
+  .landing-hero img {
+    width: 360px !important;
+  }
+
+  .landing-hero p:first-of-type {
+    font-size: 22px;
+  }
+
+  .landing-hero p:last-of-type {
+    font-size: 14px;
+    max-width: 360px;
+    line-height: 1.8;
+  }
+
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 20px;
+  }
+
+  .dashboard-grid > * {
+    min-width: 0;
+    margin: 0;
+  }
+
+  .customer-home > :first-child {
+    grid-row: span 2;
+  }
+
+  .admin-home .dashboard-stats {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .fleet-home .fleet-stats {
+    grid-column: 1 / -1;
+  }
+
+  .dashboard-stats button {
+    padding: 16px 12px;
+  }
+
+  .dashboard-stats button p:last-child {
+    font-size: 11px;
+  }
+
+  .dashboard-spacer {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-frame *,
+  .app-frame *::before,
+  .app-frame *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes scanLine {
+  0% { top: 5%; }
+  100% { top: 95%; }
+}
+
+@keyframes pulseOval {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(29, 85, 214, 0.5), 0 0 12px rgba(29, 85, 214, 0.2); }
+  50% { box-shadow: 0 0 0 12px rgba(29, 85, 214, 0), 0 0 24px rgba(29, 85, 214, 0.35); }
+}
+
+@keyframes livenessBlip {
+  0%, 100% { opacity: 0.25; transform: scale(0.65); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes successBounce {
+  0% { transform: scale(0.4); opacity: 0; }
+  55% { transform: scale(1.12); }
+  78% { transform: scale(0.96); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(14px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 2px; }
